@@ -1,6 +1,7 @@
 package com.wealthfront.magellan.sample.migration.tide
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -31,6 +32,7 @@ class DogBreedsStep : Step<DogBreedBinding>(DogBreedBinding::inflate) {
     scope.launch {
       // show loading
       val breeds = runCatching { api.getListOfAllBreedsOfRetriever() }
+
       breeds.onSuccess {
         binding.dogBreeds.adapter = DogBreedListAdapter(context, it.message)
       }.onFailure {
