@@ -16,7 +16,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import javax.inject.Inject
 
 @OpenForMocking
-class DogDetailsScreen(private val breed: String) : Screen<DogDetailsView>() {
+class DogDetailsScreen(private val dogBreed: DogListStep.DogBreed) : Screen<DogDetailsView>() {
 
   @Inject lateinit var api: DogApi
   @Inject lateinit var toolbarHelper: ToolbarHelper
@@ -35,11 +35,19 @@ class DogDetailsScreen(private val breed: String) : Screen<DogDetailsView>() {
     toolbarHelper.setMenuColor(R.color.water)
 
     rxUnsubscriber.autoDispose(
-      api.getRandomImageForBreed(breed)
-        .observeOn(mainThread())
-        .subscribe {
-          view!!.setDogPic(it.message)
-        }
+      if (dogBreed == DogListStep.DogBreed.RANDOM) {
+        api.getRandomImage()
+          .observeOn(mainThread())
+          .subscribe {
+            view!!.setDogPic(it.message)
+          }
+      } else {
+        api.getRandomImageForBreed(dogBreed.getBreedName())
+          .observeOn(mainThread())
+          .subscribe {
+            view!!.setDogPic(it.message)
+          }
+      }
     )
   }
 

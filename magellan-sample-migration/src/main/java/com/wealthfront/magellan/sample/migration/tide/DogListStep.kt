@@ -13,7 +13,7 @@ import com.wealthfront.magellan.sample.migration.toolbar.ToolbarHelper
 import java.util.Locale
 import javax.inject.Inject
 
-class DogListStep(private val goToDogDetails: (name: String) -> Unit) : Step<DashboardBinding>(DashboardBinding::inflate) {
+class DogListStep(private val goToDogDetails: (dogBreed: DogBreed) -> Unit) : Step<DashboardBinding>(DashboardBinding::inflate) {
 
   @Inject lateinit var toolbarHelper: ToolbarHelper
 
@@ -26,11 +26,12 @@ class DogListStep(private val goToDogDetails: (name: String) -> Unit) : Step<Das
     binding.dogItems.adapter = DogListAdapter(context)
   }
 
-  fun onDogSelected(name: String) {
-    goToDogDetails(name)
+  fun onDogSelected(dogBreed: DogBreed) {
+    goToDogDetails(dogBreed)
   }
 
   enum class DogBreed {
+    RANDOM, // Make random to be the first item in the list
     AKITA,
     BEAGLE,
     CHOW,
@@ -64,7 +65,7 @@ class DogListStep(private val goToDogDetails: (name: String) -> Unit) : Step<Das
       val dogDetailTextView = view!!.findViewById<TextView>(R.id.dogName)
       dogDetailTextView.text = dogDetail.getName()
       view.setOnClickListener {
-        onDogSelected(dogDetail.getBreedName())
+        onDogSelected(dogDetail)
       }
       return view
     }

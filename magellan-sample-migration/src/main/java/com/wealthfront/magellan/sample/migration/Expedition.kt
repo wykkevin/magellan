@@ -37,7 +37,7 @@ class Expedition @Inject constructor() : LegacyJourney<ExpeditionBinding>(
     removeFromLifecycle(toolbarHelper)
   }
 
-  private fun goToDetailsScreen(name: String) {
-    navigator.show(DogDetailsScreen(name))
+  private fun goToDetailsScreen(dogBreed: DogListStep.DogBreed) {
+    navigator.show(DogDetailsScreen(dogBreed))
   }
 }

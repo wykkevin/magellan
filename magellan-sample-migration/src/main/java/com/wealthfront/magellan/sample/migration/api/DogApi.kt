@@ -12,6 +12,9 @@ interface DogApi {
 
   @GET("breed/{id}/images/random")
   fun getRandomImageForBreed(@Path("id") breed: String): Observable<DogMessage>
+
+  @GET("breeds/image/random")
+  fun getRandomImage(): Observable<DogMessage>
 }
 
 data class DogMessage(
