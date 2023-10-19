@@ -35,6 +35,7 @@ class DogDetailsScreen(private val dogBreed: DogListStep.DogBreed) : Screen<DogD
     toolbarHelper.setMenuColor(R.color.water)
 
     rxUnsubscriber.autoDispose(
+      // APIs for getting a random image or an image for a given breed are different
       if (dogBreed == DogListStep.DogBreed.RANDOM) {
         api.getRandomImage()
           .observeOn(mainThread())

@@ -13,7 +13,7 @@ import org.robolectric.Shadows.shadowOf
 @RunWith(RobolectricTestRunner::class)
 class DogListStepTest {
   private var chosenBreed: String? = null
-  private val dogListStep = DogListStep { chosenBreed = it }
+  private val dogListStep = DogListStep { chosenBreed = it.getBreedName() }
   private val activityController = Robolectric.buildActivity(ComponentActivity::class.java)
 
   @Test
@@ -22,7 +22,17 @@ class DogListStepTest {
     activityController.setup()
     shadowOf(getMainLooper()).idle()
 
-    dogListStep.viewBinding!!.dogItems.getChildAt(0).performClick()
+    dogListStep.viewBinding!!.dogItems.getChildAt(1).performClick()
     assertThat(chosenBreed).isEqualTo("akita")
+  }
+
+  @Test
+  fun goesToRandomDogBreed() {
+    activityController.get().setContentScreen(dogListStep)
+    activityController.setup()
+    shadowOf(getMainLooper()).idle()
+
+    dogListStep.viewBinding!!.dogItems.getChildAt(0).performClick()
+    assertThat(chosenBreed).isEqualTo("random")
   }
 }

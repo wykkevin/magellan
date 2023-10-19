@@ -27,4 +27,10 @@ class NavigationTest {
     onView(withText("Akita")).perform(click())
     onView(withId(R.id.dogDetailsView)).check(matches(isDisplayed()))
   }
+
+  @Test
+  fun visitRandomDogImage() {
+    onView(withText("Random")).perform(click())
+    onView(withId(R.id.dogDetailsView)).check(matches(isDisplayed()))
+  }
 }

@@ -35,9 +35,15 @@ class DogDetailsScreenTest {
     message = "image-url",
     status = "success"
   )
+  private val randomBreedData = DogMessage(
+    message = "random-image-url",
+    status = "success"
+  )
 
   @Inject lateinit var api: DogApi
   @Mock lateinit var dogDetailsView: DogDetailsView
+  val specificDogBreed = DogListStep.DogBreed.BEAGLE
+  val randomDogBreed = DogListStep.DogBreed.RANDOM
 
   @Rule @JvmField
   val mockitoRule: MockitoRule = MockitoJUnit.rule().strictness(Strictness.WARN)
@@ -47,20 +53,35 @@ class DogDetailsScreenTest {
     val context = ApplicationProvider.getApplicationContext<Application>()
     ((context as AppComponentContainer).injector() as TestAppComponent).inject(this)
 
-    screen = object : DogDetailsScreen("robotic") {
+    `when`(api.getRandomImageForBreed(specificDogBreed.getBreedName())).thenReturn(Observable.just(breedData))
+    `when`(api.getRandomImage()).thenReturn(Observable.just(randomBreedData))
+  }
+
+  @Test
+  fun fetchesDogBreedOnShow() {
+    screen = object : DogDetailsScreen(specificDogBreed) {
       override fun createView(context: Context): DogDetailsView {
         super.createView(context)
         return dogDetailsView
       }
     }
 
-    `when`(api.getRandomImageForBreed("robotic")).thenReturn(Observable.just(breedData))
-  }
-
-  @Test
-  fun fetchesDogBreedOnShow() {
     screen.transitionToState(LifecycleState.Shown(activity))
     shadowOf(getMainLooper()).idle()
     verify(dogDetailsView).setDogPic("image-url")
+  }
+
+  @Test
+  fun fetchesRandomDogOnShow() {
+    screen = object : DogDetailsScreen(randomDogBreed) {
+      override fun createView(context: Context): DogDetailsView {
+        super.createView(context)
+        return dogDetailsView
+      }
+    }
+
+    screen.transitionToState(LifecycleState.Shown(activity))
+    shadowOf(getMainLooper()).idle()
+    verify(dogDetailsView).setDogPic("random-image-url")
   }
 }
